@@ -1,0 +1,25 @@
+name: YHHCICD
+on:
+  push:
+    branches:
+      - v1.6
+  pull_request:
+jobs:
+  YHHCICD:
+    if: startsWith(github.event.head_commit.message, '#norun') != true
+    name: Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          output: 'trivy-results.txt'
+          severity: 'CRITICAL'
+          
