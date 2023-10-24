@@ -23,14 +23,25 @@ jobs:
           output: 'trivy-results.txt'
           severity: 'CRITICAL'
           
-      - name: Post to a Slack channel via a proxy
+      - name: Send custom JSON data to Slack workflow
         id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          channel-id: 'CHANNEL_ID'
-          slack-message: 'This message was sent through a proxy'
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    # Set the HTTPS_PROXY environment variable to whatever your policy requires
-          HTTPS_PROXY: 'http://proxy.example.org:8080'
+    # For posting a rich message using Block Kit
+        payload: |
+          {
+        "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+        "blocks": [
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+            }
+          }
+        ]
+      }
+  env:
+    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           
