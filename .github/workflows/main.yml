@@ -24,14 +24,14 @@ jobs:
           exit-code: 1
 
       - name: Post to a Slack channel
-        uses: slackapi/slack-github-action@v1.24.0
+        uses: rtCamp/action-slack-notify@v2
         if: failure()
-        with:
-          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
-          slack-message: 'failure'
         env:
-            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
             SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+            SLACK_CHANNEL: general
+            SLACK_COLOR: '#ff0000'
+            SLACK_MESSAGE: 'run fail'
+            
             
       - name: Upload report
         uses: MeilCli/slack-upload-file@v3
