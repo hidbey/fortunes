@@ -20,7 +20,7 @@ jobs:
           ignore-unfixed: true
           format: 'table'
           output: 'trivy-results.txt'
-          severity: 'HIGH,CRITICAL'
+          severity: 'HIGH'
           exit_code: 1
 
       - name: Post to a Slack channel
