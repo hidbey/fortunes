@@ -21,7 +21,7 @@ jobs:
           format: 'table'
           output: 'trivy-results.txt'
           severity: 'HIGH'
-          exit_code: 1
+          exit-code: 1
 
       - name: Post to a Slack channel
         uses: slackapi/slack-github-action@v1.24.0
