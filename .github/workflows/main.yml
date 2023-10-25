@@ -80,8 +80,8 @@ jobs:
           SLACK_CHANNEL: general
           SLACK_COLOR: '#ffffff'
           SLACK_MESSAGE: |
-            Name:Yao Haihan
-            Metriculation:A0285864L
-            Email:E1221676@u.nus.edu
-            Git:https://github.com/${{github.repository}}/tree/v1.6
-            Image:https://hub.docker.com/repository/docker/wuliuer/gofortunes
+            *Name:*Yao Haihan
+            *Metriculation:*A0285864L
+            *Email:*E1221676@u.nus.edu
+            *Git:*https://github.com/${{github.repository}}/tree/v1.6
+            *Image:*https://hub.docker.com/repository/docker/wuliuer/gofortunes
