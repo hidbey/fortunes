@@ -44,8 +44,8 @@ jobs:
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
 
        - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
+         uses: rtCamp/action-slack-notify@v2
+         env:
             SLACK_CHANNEL: general
             SLACK_COLOR: '#ffffff'
             SLACK_MESSAGE: |
