@@ -25,7 +25,7 @@ jobs:
       -
         name: Build and push
         uses: docker/build-push-action@v5
+        id: build_and_push
         with:
           push: true
-          tags: |
-            docker.io/wuliuer/go-fortunes:latest
+          tags: wuliuer/go-fortunes:latest
