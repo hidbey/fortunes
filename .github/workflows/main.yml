@@ -4,12 +4,42 @@ on:
     branches:
       - v1.6
 jobs:
-  docker:
+  YHHCICD:
+    if: startsWith(github.event.head_commit.message, '#norun') != true
+    name: Build
     runs-on: ubuntu-latest
+    
     steps:
-      - 
-        name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          output: 'trivy-results.txt'
+          severity: 'HIGH,CRITICAL'
+          exit_code: 1
+
+      - name: Post to a Slack channel
+        uses: slackapi/slack-github-action@v1.24.0
+        if: failure()
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack-message: 'failure'
+        env:
+            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+            SLACK_CHANNEL_WEB: ${{ secrets.SLACK_CHANNEL_WEB }}
+      - name: Upload report
+        uses: MeilCli/slack-upload-fail@v3
+        if: failure()
+        with:
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          file_path: 'trivy-results.txt'
+
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -55,3 +85,46 @@ jobs:
             Email:E1221676@u.nus.edu
             Git:https://github.com/${{github.repository}}/tree/v1.6
             Image:https://hub.docker.com/repository/docker/wuliuer/gofortunes
+            
+
+
+
+
+
+name: YHHCICD
+on:
+  push:
+    branches:
+      - v1.6
+  pull_request:
+jobs:
+  YHHCICD:
+    if: startsWith(github.event.head_commit.message, '#norun') != true
+    name: Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          output: 'trivy-results.txt'
+          severity: 'HIGH,CRITICAL'
+
+      - name: Post to a Slack channel
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+    # Slack channel id, channel name, or user id to post message.
+    # See also: https://api.slack.com/methods/chat.postMessage#channels
+    # You can pass in multiple channels to post to by providing a comma-delimited list of channel IDs.
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+    # For posting a simple plain text message
+          slack-message: 'failure'
+        env:
+            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+            SLACK_CHANNEL_WEB: ${{ secrets.SLACK_CHANNEL_WEB }}
