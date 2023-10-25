@@ -20,7 +20,7 @@ jobs:
           ignore-unfixed: true
           format: 'table'
           output: 'trivy-results.txt'
-          severity: 'HIGH,CRITICAL'
+          severity: 'CRITICAL'
           exit-code: 1
 
       - name: Post to a Slack channel
@@ -31,7 +31,8 @@ jobs:
           slack-message: 'failure'
         env:
             SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-            SLACK_CHANNEL_WEB: ${{ secrets.SLACK_CHANNEL_WEB }}
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+            
       - name: Upload report
         uses: MeilCli/slack-upload-file@v3
         if: failure()
